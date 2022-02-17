@@ -40,47 +40,44 @@ function GameScreen() {
         checked: false, // eventually willl change to int of value 0 (initial state), 1 (checked by p1), 2 (checked by p3)
     }})
 
-    const [Boxes, setBoxes] = useState(initialBoxVals)
+    const boxStates = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
+        return useState(initialBoxVals[i])
+    })
 
   return (
     <View style={styles.container}>
         <View style={styles.board}>
             <View style={styles.row}>
-                <Row start={0} end={3}/>
+                <Box id={0} />
+                <Box id={1} />
+                <Box id={2} />
             </View>
             <View style={styles.row}>
-                <Row start={3} end={6}/>
+                <Box id={3} />
+                <Box id={4} />
+                <Box id={5} />
             </View>
-            <View style={styles.row}>
-                <Row start={6} end={9}/>
+            <View style={styles.row} >
+                <Box id={6} />
+                <Box id={7} />
+                <Box id={8} />
             </View>
         </View>
     </View>
   )
     
-    function Row(props) {
-        return (
-            Boxes.slice(props.start, props.end).map((box) => { 
-            if (box.checked === true) {    
-                    return (
-                    <View style={styles.box} onTouchStart={() => checkHandler(box.id)}>
-                        <Image style={styles.image} source={require("../assets/grumpycat.png")} />
-                    </View>)
-            } else {
-                return (
-                    <View style={styles.box} onTouchStart={() => checkHandler(box.id)}>
-                    </View>)
-            }
-            })
-        )
-    }
-  
-    function checkHandler(id) {
-        let boxes = [...Boxes]
-        console.log(boxes[id].checked)
-        boxes = boxes.map((box) => {return id === box.id ? {...box, checked: !box.checked} : box})
-        console.log(boxes[id].checked)
-        setBoxes(boxes)
+    function Box(props) {
+        let [box, setBox] = boxStates[props.id]
+        if (box.checked === true) {
+            return (
+                <View style={styles.box} onTouchStart={() => setBox({...box, checked: !box.checked})}>
+                    <Image style={styles.image} source={require("../assets/grumpycat.png")} />
+                </View>)
+        } else {
+            return (
+                <View style={styles.box} onTouchStart={() => setBox({...box, checked: !box.checked})}>
+                </View>)
+        }
     }
 }
 
