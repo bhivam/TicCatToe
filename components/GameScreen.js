@@ -35,14 +35,7 @@ const styles = StyleSheet.create({
 
 function GameScreen() {
     
-    const initialBoxVals = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((idNum) => { return {
-        id: idNum,
-        checked: false, // eventually willl change to int of value 0 (initial state), 1 (checked by p1), 2 (checked by p3)
-    }})
-
-    const boxStates = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
-        return useState(initialBoxVals[i])
-    })
+    let images = [require(''), require("../assets/icon.png"), require("../assets/grumpycat.png")]
 
   return (
     <View style={styles.container}>
@@ -66,18 +59,27 @@ function GameScreen() {
     </View>
   )
     
-    function Box(props) {
-        let [box, setBox] = boxStates[props.id]
-        if (box.checked === true) {
-            return (
-                <View style={styles.box} onTouchStart={() => setBox({...box, checked: !box.checked})}>
-                    <Image style={styles.image} source={require("../assets/grumpycat.png")} />
-                </View>)
-        } else {
-            return (
-                <View style={styles.box} onTouchStart={() => setBox({...box, checked: !box.checked})}>
-                </View>)
+    function Box() {
+        const [image, setImage] = useState(images[0])
+
+        function changeImage(isPlayerOne) {
+            if (isPlayerOne) {
+                setImage(images[1])
+            } else {
+                setImage(images[2])
+            }
         }
+
+        return (
+            <View style={styles.box}>
+                <Image style={styles.image} source={image} onTouchStart={() => {
+                    if (image === images[0]) {
+                        setImage(images[1])
+                    } else {
+                        setImage(images[0])
+                    }f
+                }}/>
+            </View>)
     }
 }
 
