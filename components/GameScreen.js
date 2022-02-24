@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Button, View, Text, Image } from 'react-native';
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
-
 
 const styles = StyleSheet.create({
     container: {
@@ -34,8 +32,12 @@ const styles = StyleSheet.create({
 })
 
 function GameScreen() {
-    
-    let images = [require(''), require("../assets/icon.png"), require("../assets/grumpycat.png")]
+
+    let isPlayerOne = true    
+    let images = [require("../assets/icon.png"), require("../assets/cutecat.png"), require("../assets/grumpycat.png")]
+    let position = [[0, 0, 0],
+                    [0, 0, 0], 
+                    [0, 0, 0]]
 
   return (
     <View style={styles.container}>
@@ -59,26 +61,26 @@ function GameScreen() {
     </View>
   )
     
-    function Box() {
+    function Box(props) {
         const [image, setImage] = useState(images[0])
 
         function changeImage(isPlayerOne) {
-            if (isPlayerOne) {
-                setImage(images[1])
-            } else {
-                setImage(images[2])
+            let row = Math.floor(props.id/3);
+            let col = props.id % 3;
+            console.log(isPlayerOne)
+            if (position[row][col] === 0) {
+                position[row][col] = isPlayerOne ? 1:2
+                isPlayerOne = !isPlayerOne
+                setImage(images[position[row][col]])
             }
+            console.log(isPlayerOne)
+
+            console.log(position)
         }
 
         return (
             <View style={styles.box}>
-                <Image style={styles.image} source={image} onTouchStart={() => {
-                    if (image === images[0]) {
-                        setImage(images[1])
-                    } else {
-                        setImage(images[0])
-                    }f
-                }}/>
+                <Image style={styles.image} source={image} onTouchStart={() => changeImage(isPlayerOne)}/>
             </View>)
     }
 }
